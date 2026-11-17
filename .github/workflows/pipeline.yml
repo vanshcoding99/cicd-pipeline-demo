@@ -1,0 +1,89 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Assemble site
+        run: |
+          mkdir -p site
+          cp index.html site/
+          echo "Build complete. Contents of site/:"
+          ls -la site/
+
+      - name: Upload build output
+        uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: site/
+
+  test:
+    name: Test
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download build output
+        uses: actions/download-artifact@v4
+        with:
+          name: site
+          path: site
+
+      - name: index.html exists and is not empty
+        run: test -s site/index.html
+
+      - name: index.html has a valid doctype
+        run: head -n 1 site/index.html | grep -iq '<!DOCTYPE html>'
+
+      - name: index.html has a title
+        run: grep -q '<title>' site/index.html
+
+      - name: HTML tags are balanced
+        run: |
+          open_count=$(grep -c '<html' site/index.html)
+          close_count=$(grep -c '</html>' site/index.html)
+          if [ "$open_count" -ne "$close_count" ]; then
+            echo "Unbalanced html tags: $open_count open, $close_count close"
+            exit 1
+          fi
+          echo "All tests passed."
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: test
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

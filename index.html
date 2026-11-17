@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CI/CD Pipeline Demo</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --accent: #38bdf8;
+      --ok: #4ade80;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: linear-gradient(140deg, var(--bg), #172554);
+      color: var(--text);
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid #334155;
+      border-radius: 14px;
+      padding: 2.5rem;
+      max-width: 620px;
+      width: 100%;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+    }
+    h1 {
+      margin: 0 0 0.35rem;
+      font-size: 1.9rem;
+      color: var(--accent);
+    }
+    .sub {
+      margin: 0 0 1.75rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    .stages {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.75rem;
+    }
+    .stage {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 999px;
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .stage span { color: var(--ok); margin-right: 0.35rem; }
+    .arrow { color: var(--muted); }
+    dl {
+      margin: 0;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0.6rem 1.25rem;
+      font-size: 0.95rem;
+    }
+    dt { color: var(--muted); }
+    dd { margin: 0; font-weight: 600; }
+    footer {
+      margin-top: 1.75rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid #334155;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>CI/CD Pipeline Demo</h1>
+    <p class="sub">Deployed automatically by GitHub Actions to GitHub Pages.</p>
+
+    <div class="stages">
+      <div class="stage"><span>&#10003;</span>Build</div>
+      <div class="arrow">&rarr;</div>
+      <div class="stage"><span>&#10003;</span>Test</div>
+      <div class="arrow">&rarr;</div>
+      <div class="stage"><span>&#10003;</span>Deploy</div>
+    </div>
+
+    <dl>
+      <dt>Student</dt>
+      <dd>Vansh Sharma</dd>
+      <dt>Course</dt>
+      <dd>COMP 3520, Software Engineering</dd>
+      <dt>Activity</dt>
+      <dd>Class Participation: CI/CD Pipeline</dd>
+      <dt>Institution</dt>
+      <dd>Thompson Rivers University</dd>
+    </dl>
+
+    <footer>
+      Every push to the main branch runs the build and test stages, then publishes
+      this page. If any stage fails, the deployment does not happen.
+    </footer>
+  </main>
+</body>
+</html>
